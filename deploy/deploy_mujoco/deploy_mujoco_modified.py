@@ -11,6 +11,9 @@ import yaml
 # overwrite the directory that LEGGED_GYM_ROOT_DIR points to
 LEGGED_GYM_ROOT_DIR = "/home/sergio/projects_third_party/unitree_rl_gym"
 
+# for using the joystick instead of the keyboard
+import pygame
+
 def get_gravity_orientation(quaternion):
     qw = quaternion[0]
     qx = quaternion[1]
@@ -79,6 +82,30 @@ if __name__ == "__main__":
     # load policy
     policy = torch.jit.load(policy_path)
 
+    # get the joystick axis limits
+    vx_min = config["joystick"]["vx_min"]
+    vx_max = config["joystick"]["vx_max"]
+    vy_min = config["joystick"]["vy_min"]
+    vy_max = config["joystick"]["vy_max"]
+    omega_z_min = config["joystick"]["omega_min"]
+    omega_z_max = config["joystick"]["omega_max"]
+    deadzone = config["joystick"]["deadzone"]
+
+    # initialize the joystick
+    pygame.init()
+    pygame.joystick.init()
+    num_joysticks = pygame.joystick.get_count()
+    if num_joysticks == 0:
+        print("No joystick found")
+        joystick_availble = False
+    else:
+        joystick = pygame.joystick.Joystick(0)
+        joystick.init()
+        joystick_availble = True
+
+    # get the intial simulation time
+    t0 = time.time()
+
     with mujoco.viewer.launch_passive(m, d) as viewer:
         # Close the viewer automatically after simulation_duration wall-seconds.
         start = time.time()
@@ -89,6 +116,32 @@ if __name__ == "__main__":
             # mj_step can be replaced with code that also evaluates
             # a policy and applies a control signal before stepping the physics.
             mujoco.mj_step(m, d)
+
+            # update the joystick
+            if joystick_availble==True:
+                
+                # unpack the raw values
+                pygame.event.pump()
+                vx = -joystick.get_axis(1)
+                vy = -joystick.get_axis(0)
+                omega = -joystick.get_axis(3)
+
+                # scale the values to the desired range
+                if abs(vx) < deadzone:
+                    vx = 0
+                else:
+                    vx = ((vx_max - vx_min) / 2) * vx
+                if abs(vy) < deadzone:
+                    vy = 0
+                else:
+                    vy = ((vy_max - vy_min) / 2) * vy
+                if abs(omega) < deadzone:
+                    omega_z = 0
+                else:
+                    omega_z = ((omega_z_max - omega_z_min) / 2) * omega
+
+                cmd = [vx, vy, omega_z]
+                print(f"[{vx:.2f}, {vy:.2f}, {omega_z:.2f}]")
 
             counter += 1
             if counter % control_decimation == 0:
@@ -126,6 +179,9 @@ if __name__ == "__main__":
 
             # Pick up changes to the physics state, apply perturbations, update options from GUI.
             viewer.sync()
+
+            # print the current time
+            # print(time.time()- t0)
 
             # Rudimentary time keeping, will drift relative to wall clock.
             time_until_next_step = m.opt.timestep - (time.time() - step_start)
