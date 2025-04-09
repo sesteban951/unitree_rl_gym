@@ -9,7 +9,7 @@ import torch
 import yaml
 
 # overwrite the directory that LEGGED_GYM_ROOT_DIR points to
-LEGGED_GYM_ROOT_DIR = "/home/sergio/projects_third_party/unitree_rl_gym"
+LEGGED_GYM_ROOT_DIR = "/home/sergio/projects/unitree_rl_gym"
 
 def get_gravity_orientation(quaternion):
     qw = quaternion[0]
@@ -70,6 +70,8 @@ if __name__ == "__main__":
     obs = np.zeros(num_obs, dtype=np.float32)
 
     counter = 0
+
+    print(xml_path)
 
     # Load robot model
     m = mujoco.MjModel.from_xml_path(xml_path)

@@ -1,5 +1,6 @@
 <mujoco model="g1 scene">
   <include file="g1_12dof.xml"/>
+  <!-- <include file="/home/sergio/projects_third_party/unitree_rl_gym/resources/robots/g1_description/g1_12dof.xml"/> -->
 
   <statistic center="1.0 0.7 1.0" extent="0.8"/>
 

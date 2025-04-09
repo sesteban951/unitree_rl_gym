@@ -9,7 +9,7 @@ import torch
 import yaml
 
 # overwrite the directory that LEGGED_GYM_ROOT_DIR points to
-LEGGED_GYM_ROOT_DIR = "/home/sergio/projects_third_party/unitree_rl_gym"
+LEGGED_GYM_ROOT_DIR = "/home/sergio/projects/unitree_rl_gym"
 
 # for using the joystick instead of the keyboard
 import pygame

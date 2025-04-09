@@ -1,4 +1,4 @@
-<mujoco model="g1 scene">
+<mujoco model="g1 scene modified">
   <include file="g1_12dof_modified.xml"/>
 
   <statistic center="1.0 0.7 1.0" extent="0.8"/>
