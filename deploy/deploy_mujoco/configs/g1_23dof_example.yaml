@@ -3,7 +3,7 @@
 # stand_policy_path: "{LEGGED_GYM_ROOT_DIR}/deploy/ckpts/policy_0.85_extended.pt"
 policy_path: "{LEGGED_GYM_ROOT_DIR}/deploy/pre_train/g1/policy_0.85.pt"
 stand_policy_path: "{LEGGED_GYM_ROOT_DIR}/deploy/pre_train/g1/policy_0.85.pt"
-xml_path: "{LEGGED_GYM_ROOT_DIR}/resources/robots/g1_description/g1_23dof_rev_1_0.xml"
+xml_path: "{LEGGED_GYM_ROOT_DIR}/resources/robots/g1_description/g1_23dof_rev_1_0_damped.xml"
 
 # Total simulation time
 simulation_duration: 50.0
