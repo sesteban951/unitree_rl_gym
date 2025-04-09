@@ -164,13 +164,13 @@ if __name__ == "__main__":
                 sin_phase = np.sin(2 * np.pi * phase)
                 cos_phase = np.cos(2 * np.pi * phase)
 
-                obs[:3] = omega
-                obs[3:6] = gravity_orientation
-                obs[6:9] = cmd * cmd_scale
-                obs[9 : 9 + num_actions] = qj
-                obs[9 + num_actions : 9 + 2 * num_actions] = dqj
-                obs[9 + 2 * num_actions : 9 + 3 * num_actions] = action
-                obs[9 + 3 * num_actions : 9 + 3 * num_actions + 2] = np.array([sin_phase, cos_phase])
+                obs[:3] = omega                  # angular velocity (3)
+                obs[3:6] = gravity_orientation   # base orientation (3)
+                obs[6:9] = cmd * cmd_scale       # velocity command, vx, vy, angular velocity (3)
+                obs[9 : 9 + num_actions] = qj    # current joint positions (12)
+                obs[9 + num_actions : 9 + 2 * num_actions] = dqj         # current joint velocities (12)
+                obs[9 + 2 * num_actions : 9 + 3 * num_actions] = action  # last action taken (12)
+                obs[9 + 3 * num_actions : 9 + 3 * num_actions + 2] = np.array([sin_phase, cos_phase]) # command phase (2)
                 obs_tensor = torch.from_numpy(obs).unsqueeze(0)
                 # policy inference
                 action = policy(obs_tensor).detach().numpy().squeeze()
