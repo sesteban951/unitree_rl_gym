@@ -1,4 +1,4 @@
-<mujoco model="g1_12dof">
+<mujoco model="g1_12dof_modified">
   <compiler angle="radian" meshdir="meshes/"/>
 
   <statistic meansize="0.144785" extent="1.23314" center="0.025392 2.0634e-05 -0.245975"/>
