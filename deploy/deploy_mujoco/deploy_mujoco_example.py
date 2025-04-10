@@ -269,14 +269,16 @@ if __name__ == "__main__":
 
                 print("cmd: ", cmd)
 
-                obs[:3] = omega
-                obs[3:6] = gravity_orientation
-                obs[6:9] = cmd * cmd_scale
-                obs[9 : 9 + num_actions] = qj
-                obs[9 + num_actions : 9 + 2 * num_actions] = dqj
-                obs[9 + 2 * num_actions : 9 + 3 * num_actions] = action
-                obs[9 + 3 * num_actions : 9 + 3 * num_actions + 2] = np.array([sin_phase, cos_phase])
+                # total observations (80)
+                obs[:3] = omega                  # angular velocity (3)
+                obs[3:6] = gravity_orientation   # base orientation (3) 
+                obs[6:9] = cmd * cmd_scale       # velocity command, vx, vy, angular velocity (3)
+                obs[9 : 9 + num_actions] = qj    # current joint positions (23)
+                obs[9 + num_actions : 9 + 2 * num_actions] = dqj          # current joint velocities (23)
+                obs[9 + 2 * num_actions : 9 + 3 * num_actions] = action   # last action taken (23)
+                obs[9 + 3 * num_actions : 9 + 3 * num_actions + 2] = np.array([sin_phase, cos_phase])  # command phase (2)
                 obs_tensor = torch.from_numpy(obs).unsqueeze(0)
+
                 # policy inference
                 if torch.cuda.is_available():
                     obs_tensor = obs_tensor.cuda()

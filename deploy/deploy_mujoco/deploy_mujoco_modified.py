@@ -164,6 +164,7 @@ if __name__ == "__main__":
                 sin_phase = np.sin(2 * np.pi * phase)
                 cos_phase = np.cos(2 * np.pi * phase)
 
+                # total obersations (47)
                 obs[:3] = omega                  # angular velocity (3)
                 obs[3:6] = gravity_orientation   # base orientation (3)
                 obs[6:9] = cmd * cmd_scale       # velocity command, vx, vy, angular velocity (3)
