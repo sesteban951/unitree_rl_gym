@@ -5,10 +5,14 @@ def inspect_pt_file(pt_path):
     try:
         # Load the model (map_location allows loading on CPU if trained on GPU)
         model = torch.jit.load(pt_path, map_location='cpu')
-        
-        print("\n" + "="*50)
+
+        print("\n" + "="*75)
         print(f"Inspecting: {pt_path}")
-        print("="*50 + "\n")
+        print("="*75 + "\n")
+
+        # 0. Model Structure
+        print("\n=== Model Structure ===")
+        print(model)
 
         # 1. Print model code (if it's a TorchScript model)
         print("\n=== Model Code ===")
@@ -46,6 +50,10 @@ def inspect_pt_file(pt_path):
 
 if __name__ == "__main__":
     
-    policy_path = ""
+    policy_paths = ["g1/motion.pt", "g1/policy_0.85.pt", "g1/policy.pt"]
+    # policy_paths = ["g1/motion.pt"]
 
-    inspect_pt_file(policy_path)
+    for policy_path in policy_paths:
+
+        inspect_pt_file(policy_path)
+        print("\n" * 3)
