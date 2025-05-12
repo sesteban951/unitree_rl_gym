@@ -35,13 +35,16 @@ def inspect_pt_file(pt_path):
 
         # 5. Check expected input/output shapes
         print("\n=== Expected Input Shape ===")
-        dummy_input = torch.randn(1, 123)  # Adjust based on your model
-        try:
-            output = model(dummy_input)
-            print(f"Input shape: {dummy_input.shape}")
-            print(f"Output shape: {output.shape}")
-        except RuntimeError as e:
-            print(f"Input shape test failed (adjust dummy_input): {e}")
+        for input_size in range(2, 2000):  # Start from 47 since the model expects this size
+            dummy_input = torch.randn(1, input_size)  # Create a dummy input with the current size
+            try:
+                output = model(dummy_input)  # Test the model with the dummy input
+                print(f"Correct input size found: {input_size}")
+                print(f"Input shape: {dummy_input.shape}")
+                print(f"Output shape: {output.shape}")
+                break  # Exit the loop once the correct input size is found
+            except RuntimeError:
+                pass
 
     except Exception as e:
         print(f"Error loading {pt_path}: {e}")
